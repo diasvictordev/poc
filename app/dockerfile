@@ -1,0 +1,21 @@
+FROM ghcr.io/graalvm/graalvm-ce:latest as graalvm
+WORKDIR /app
+
+# Copy the code
+COPY . .
+
+# Build the native image using GraalVM
+RUN mvn clean package -Pnative
+
+# Use the Amazon Linux 2 runtime environment for the second stage
+FROM amazonlinux:2
+WORKDIR /var/task
+
+# Copy over the bootstrap and native image
+COPY --from=graalvm /home/app/target/my-lambda /var/task/bootstrap
+
+# Set the bootstrap file as executable
+RUN chmod +x /var/task/bootstrap
+
+# Lambda functions should have the bootstrap in the right place
+CMD [ "bootstrap" ]
