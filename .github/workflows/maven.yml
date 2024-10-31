@@ -43,7 +43,7 @@ jobs:
           zip meu-lambda.zip aws-lambda-java-starter-example-0.0.1
  
       - name: Upload Native Executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
           path: target/aws-lambda-java-starter-example
