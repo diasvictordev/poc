@@ -33,15 +33,9 @@ jobs:
       - name: Build project
         run: mvn clean package -Pnative
 
-      - name: Create bootstrap file
-        run: |
-          echo '#!/bin/sh' > bootstrap
-          echo 'chmod +x lambda-graalvm' >> bootstrap
-          echo 'exec ./lambda-graalvm' >> bootstrap
-          chmod +x bootstrap  # Torna o arquivo executável
-
       - name: Set executable permissions
         run: |
+          chmod +x bootstrap
           chmod +x lambda-graalvm
 
       - name: Create ZIP for Lambda
