@@ -33,25 +33,25 @@ jobs:
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
+
       - name: Build project
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
           mvn clean package -Pnative
-          
+
       - name: List target directory after build
         run: ls -l app/target
 
       - name: Create bootstrap file
         run: |
           echo '#!/bin/sh' > bootstrap
-          echo 'chmod +x ./lambda-graalvm' >> bootstrap
           echo 'exec ./lambda-graalvm' >> bootstrap
-          chmod +x bootstrap
+          chmod +x bootstrap  # Torna o arquivo bootstrap executável
 
       - name: Move executables to root
         run: |
           mv app/target/lambda-graalvm ./
-          chmod +x ./lambda-graalvm
+          chmod +x ./lambda-graalvm  # Torna o executável disponível
 
       - name: List root directory
         run: ls -l
