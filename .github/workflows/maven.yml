@@ -25,7 +25,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-          sudo tar -xzf graalvm-community-jdk-21.0.2-linux-amd64.tar.gz -C /opt
+           if [ $? -ne 0 ]; then
+            echo "Falha ao baixar o GraalVM. Verifique a versão."
+            exit 1
+          fi
+          sudo tar -xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz -C /opt
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           gu install native-image
