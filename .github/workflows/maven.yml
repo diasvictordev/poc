@@ -47,10 +47,10 @@ jobs:
       - name: Create ZIP for Lambda
         run: |
           cd app/target  # Altere para o diretório correto
-          zip meu-lambda.zip lambda-graalvm-0.0.1
+          zip meu-lambda.zip lambda-graalvm-1.0-SNAPSHOT.jar  # Nome correto do arquivo
  
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
-          path: app/target/aws-lambda-java-starter-example  # Altere para o caminho correto
+          path: app/target/lambda-graalvm-1.0-SNAPSHOT  # Ajuste se necessário
