@@ -45,7 +45,7 @@ jobs:
           chmod +x bootstrap  # Torna o arquivo executável
 
       - name: List target directory
-        run: ls -l target  # Listar arquivos no diretório target
+        run: ls -l app/target  # Listar arquivos no diretório target
 
       - name: Move executables to root
         run: |
