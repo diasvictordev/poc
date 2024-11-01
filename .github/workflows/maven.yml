@@ -37,7 +37,7 @@ jobs:
       - name: Build project
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
-          mvn clean package -Pnative
+          mvn clean package -Pnative -DskipTests -Dgraalvm.native-image.args="--static"
 
       - name: List target directory after build
         run: ls -l app/target
