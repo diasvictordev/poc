@@ -53,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
-          path: app/target/lambda-graalvm-1.0-SNAPSHOT  # Ajuste se necessário
+          path: app/target/lambda-graalvm  # Ajuste se necessário
