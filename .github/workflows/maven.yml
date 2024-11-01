@@ -32,6 +32,7 @@ jobs:
           sudo tar -xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz -C /opt
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
+          native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
           gu install native-image
  
       - name: Build project
