@@ -39,10 +39,14 @@ jobs:
           cd app  # Altere para o diretório que contém o pom.xml
           mvn clean package -Pnative
  
-      - name: List files in target directory
+      - name: Create bootstrap file
         run: |
-          cd app/target  # Altere para o diretório target correto
-          ls -l
+          echo '#!/bin/sh' > app/target/bootstrap
+          echo 'chmod +x ./lambda-graalvm' >> app/target/bootstrap
+          echo 'exec ./lambda-graalvm' >> app/target/bootstrap
+
+      - name: List files in target directory
+        run: ls -l app/target  # Verifique se o bootstrap foi criado
 
       - name: Set executable permissions
         run: |
