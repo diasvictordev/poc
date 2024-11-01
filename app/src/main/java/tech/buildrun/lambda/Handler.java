@@ -1,5 +1,3 @@
-
-
 package tech.buildrun.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -40,20 +38,5 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    public static void main(String[] args) {
-        APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
-        // request.setBody("{\"username\":\"admin\", \"password\":\"123\"}");
-        
-        // Teste sem um contexto real
-        Context context = null;
-
-        // Cria a instância do Handler e chama o método handleRequest
-        Handler handler = new Handler();
-        APIGatewayProxyResponseEvent response = handler.handleRequest(request, null);
-
-        // Exibe a resposta no console
-        System.out.println("Resposta: " + response.getBody());
     }
 }
