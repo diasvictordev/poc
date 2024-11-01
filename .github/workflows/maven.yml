@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-           if [ $? -ne 0 ]; then
+          if [ $? -ne 0 ]; then
             echo "Falha ao baixar o GraalVM. Verifique a versão."
             exit 1
           fi
@@ -33,20 +33,24 @@ jobs:
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
- 
+
       - name: Build project
-        run: mvn clean package -Pnative
+        run: |
+          cd app/pom.xml  # Altere para o diretório que contém o pom.xml
+          mvn clean package -Pnative
  
       - name: List files in target directory
-        run: ls -l target
+        run: |
+          cd app/target  # Altere para o diretório target correto
+          ls -l
  
       - name: Create ZIP for Lambda
         run: |
-          cd target
-          zip meu-lambda.zip aws-lambda-java-starter-example-0.0.1
+          cd app/target  # Altere para o diretório correto
+          zip meu-lambda.zip lambda-graalvm-0.0.1
  
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
-          path: target/aws-lambda-java-starter-example
+          path: app/target/aws-lambda-java-starter-example  # Altere para o caminho correto
