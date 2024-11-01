@@ -37,20 +37,24 @@ jobs:
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
           mvn clean package -Pnative
+          
+      - name: List target directory after build
+        run: ls -l app/target
+
       - name: Create bootstrap file
         run: |
           echo '#!/bin/sh' > bootstrap
-          echo 'chmod +x lambda-graalvm' >> bootstrap
+          echo 'chmod +x ./lambda-graalvm' >> bootstrap
           echo 'exec ./lambda-graalvm' >> bootstrap
-          chmod +x bootstrap  # Torna o arquivo executável
-
-      - name: List target directory
-        run: ls -l app/target  # Listar arquivos no diretório target
+          chmod +x bootstrap
 
       - name: Move executables to root
         run: |
-          mv app/target/lambda-graalvm .  # Move o executável para o diretório raiz
-          chmod +x lambda-graalvm  # Torna o arquivo executável
+          mv app/target/lambda-graalvm ./
+          chmod +x ./lambda-graalvm
+
+      - name: List root directory
+        run: ls -l
 
       - name: Create ZIP for Lambda
         run: |
