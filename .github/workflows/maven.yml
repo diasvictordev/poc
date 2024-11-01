@@ -5,62 +5,51 @@ on:
   pull_request:
     branches:
       - main
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
- 
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
- 
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'graalvm'
- 
+
       - name: Install GraalVM
         run: |
           sudo apt-get update
           sudo apt-get install -y wget
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-          if [ $? -ne 0 ]; then
-            echo "Falha ao baixar o GraalVM. Verifique a versão."
-            exit 1
-          fi
           sudo tar -xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz -C /opt
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
 
       - name: Build project
-        run: |
-          cd app  # Altere para o diretório que contém o pom.xml
-          mvn clean package -Pnative
- 
+        run: mvn clean package -Pnative
+
       - name: Create bootstrap file
         run: |
-          echo '#!/bin/sh' > app/target/bootstrap
-          echo 'chmod +x ./lambda-graalvm' >> app/target/bootstrap
-          echo 'exec ./lambda-graalvm' >> app/target/bootstrap
-
-      - name: List files in target directory
-        run: ls -l app/target  # Verifique se o bootstrap foi criado
+          echo '#!/bin/sh' > bootstrap
+          echo 'chmod +x lambda-graalvm' >> bootstrap
+          echo 'exec ./lambda-graalvm' >> bootstrap
+          chmod +x bootstrap  # Torna o arquivo executável
 
       - name: Set executable permissions
         run: |
-          cd app/target
-          chmod +x bootstrap
           chmod +x lambda-graalvm
- 
+
       - name: Create ZIP for Lambda
         run: |
-          cd app/target  # Altere para o diretório correto
-          zip meu-lambda.zip lambda-graalvm-1.0-SNAPSHOT.jar  # Nome correto do arquivo
- 
+          zip meu-lambda.zip bootstrap lambda-graalvm
+
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
-          path: app/target/lambda-graalvm  # Ajuste se necessário
+          path: meu-lambda.zip
