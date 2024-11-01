@@ -23,7 +23,6 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request,
                                                       Context context) {
         try {
-
             var loginRequest = mapper.readValue(request.getBody(), LoginRequest.class);
 
             boolean isAuthorized = loginRequest.username().equalsIgnoreCase("admin")
@@ -38,5 +37,13 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        // Apenas cria a instância do handler
+        Handler handler = new Handler();
+
+        // Mensagem opcional para confirmar a criação da instância
+        System.out.println("Handler instance created.");
     }
 }
