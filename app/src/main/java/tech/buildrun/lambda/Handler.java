@@ -45,7 +45,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     public static void main(String[] args) {
         // Simulação de um request para teste
         APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent();
-        // request.setBody("{\"username\":\"admin\", \"password\":\"123\"}");
+        request.setBody("{\"username\":\"admin\", \"password\":\"123\"}");
 
         // Teste sem um contexto real
         Context context = null;
