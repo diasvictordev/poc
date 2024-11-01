@@ -43,6 +43,12 @@ jobs:
         run: |
           cd app/target  # Altere para o diretório target correto
           ls -l
+
+      - name: Set executable permissions
+        run: |
+          cd app/target
+          chmod +x bootstrap
+          chmod +x lambda-graalvm
  
       - name: Create ZIP for Lambda
         run: |
