@@ -36,7 +36,7 @@ jobs:
 
       - name: Build project
         run: |
-          cd app/pom.xml  # Altere para o diretório que contém o pom.xml
+          cd app  # Altere para o diretório que contém o pom.xml
           mvn clean package -Pnative
  
       - name: List files in target directory
