@@ -38,18 +38,23 @@ jobs:
           cd app  # Altere para o diretório que contém o pom.xml
           mvn clean package -Pnative
  
-      - name: List files in target directory
+      - name: Create bootstrap file
         run: |
-          cd app/target  # Altere para o diretório target correto
-          ls -l
- 
+          echo '#!/bin/sh' > bootstrap
+          echo 'chmod +x lambda-graalvm' >> bootstrap
+          echo 'exec ./lambda-graalvm' >> bootstrap
+          chmod +x bootstrap  # Torna o arquivo executável
+
+      - name: Set executable permissions
+        run: |
+          chmod +x lambda-graalvm
+
       - name: Create ZIP for Lambda
         run: |
-          cd app/target  # Altere para o diretório correto
-          zip meu-lambda.zip lambda-graalvm-1.0-SNAPSHOT.jar  # Nome correto do arquivo
- 
+          zip meu-lambda.zip bootstrap lambda-graalvm
+
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
         with:
           name: meu-lambda-executavel
-          path: app/target/lambda-graalvm
+          path: meu-lambda.zip
