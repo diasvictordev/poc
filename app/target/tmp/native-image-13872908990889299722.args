@@ -1,0 +1,6 @@
+-cp
+C:\\Users\\victor.dias\\Downloads\\poc01\\poc\\app\\target\\lambda-graalvm-1.0-SNAPSHOT.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\amazonaws\\aws-lambda-java-events\\3.11.0\\aws-lambda-java-events-3.11.0.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\fasterxml\\jackson\\core\\jackson-annotations\\2.15.2\\jackson-annotations-2.15.2.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\fasterxml\\jackson\\core\\jackson-core\\2.15.2\\jackson-core-2.15.2.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\fasterxml\\jackson\\datatype\\jackson-datatype-jsr310\\2.15.2\\jackson-datatype-jsr310-2.15.2.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\fasterxml\\jackson\\datatype\\jackson-datatype-jdk8\\2.15.2\\jackson-datatype-jdk8-2.15.2.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\amazonaws\\aws-lambda-java-core\\1.2.1\\aws-lambda-java-core-1.2.1.jar;C:\\Users\\victor.dias\\.m2\\repository\\joda-time\\joda-time\\2.6\\joda-time-2.6.jar;C:\\Users\\victor.dias\\.m2\\repository\\com\\fasterxml\\jackson\\core\\jackson-databind\\2.15.2\\jackson-databind-2.15.2.jar
+--no-fallback
+-H:Path=C:\\Users\\victor.dias\\Downloads\\poc01\\poc\\app\\target
+-H:Name=lambda-graalvm
+-H:Class=tech.buildrun.lambda.Handler
