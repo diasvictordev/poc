@@ -33,10 +33,9 @@ jobs:
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
-          gu install native-image
  
       - name: Build project
-        run: mvn clean package
+        run: mvn clean package -Pnative
  
       - name: List files in target directory
         run: ls -l target
