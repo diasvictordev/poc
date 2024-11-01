@@ -49,7 +49,7 @@ jobs:
 
       - name: Move executables to root
         run: |
-          mv target/lambda-graalvm .  # Move o executável para o diretório raiz
+          mv app/target/lambda-graalvm .  # Move o executável para o diretório raiz
           chmod +x lambda-graalvm  # Torna o arquivo executável
 
       - name: Create ZIP for Lambda
