@@ -19,6 +19,11 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         mapper = new ObjectMapper();
     }
 
+     public String helloWorld(){
+        return "Hello world";
+    }
+
+
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request,
                                                       Context context) {
