@@ -130,13 +130,12 @@
                         <artifactId>native-maven-plugin</artifactId>
                         <version>0.9.22</version>
                         <configuration>
-                            <mainClass>tech.buildrun.lambda.Handler</mainClass>
-<!--                            <nativeImage>-->
-<!--                                <args>-->
-<!--                                    <arg>&#45;&#45;initialize-at-build-time=com.fasterxml.jackson.databind.ObjectMapper</arg>-->
-<!--                                    <arg>&#45;&#45;initialize-at-run-time=com.fasterxml.jackson.databind.ObjectMapper</arg>-->
-<!--                                </args>-->
-<!--                            </nativeImage>-->
+                             <nativeImage>
+                                   <args>
+                                       <arg>--initialize-at-build-time=com.fasterxml.jackson.databind.ObjectMapper</arg>
+                                       <arg>--initialize-at-run-time=com.fasterxml.jackson.databind.ObjectMapper</arg>
+                                   </args>
+                               </nativeImage>
                         </configuration>
                         <executions>
                             <execution>
