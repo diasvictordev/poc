@@ -37,8 +37,7 @@ jobs:
       - name: Build project
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
-           mvn clean package -Pnative -DskipTests -Dgraalvm.native-image.args="--static --no-fallback --initialize-at-build-time=com.fasterxml.jackson.databind.ObjectMapper"
-
+           mvn clean package -Pnative -DskipTests
       - name: List target directory after build
         run: ls -l app/target
 
