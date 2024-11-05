@@ -1,3 +1,5 @@
+name: Build Lambda Native Java Application
+
 on:
   push:
     branches:
@@ -14,14 +16,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 21
+      - name: Set up JDK 21 with GraalVM
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'graalvm'
 
-      - name: Install GraalVM
+      - name: Install GraalVM and Native Image
         run: |
+          # Install GraalVM if it's not provided by the setup-java action
           sudo apt-get update
           sudo apt-get install -y wget
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
@@ -34,10 +37,12 @@ jobs:
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
 
-      - name: Build project
+      - name: Build native image with Maven
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
-           mvn clean package -Pnative -DskipTests
+          mvn clean package -Pnative -DskipTests
+        working-directory: ./app
+
       - name: List target directory after build
         run: ls -l app/target
 
@@ -49,15 +54,16 @@ jobs:
 
       - name: Move executables to root
         run: |
-          mv app/target/lambda-graalvm ./
+          mv app/target/lambda-graalvm ./  # Move o executável nativo para a raiz
           chmod +x ./lambda-graalvm  # Torna o executável disponível
 
       - name: List root directory
         run: ls -l
 
-      - name: Create ZIP for Lambda
+      - name: Create ZIP for Lambda deployment
         run: |
           zip meu-lambda.zip bootstrap lambda-graalvm
+          ls -l meu-lambda.zip
 
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
