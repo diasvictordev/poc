@@ -4,6 +4,7 @@ package tech.buildrun.lambda;
 public class Main {
 
     public static void main(String[] args) {
-       System.out.println("Hello world!");
+       Handler handler = new Handler();
+        handler.sendRequest();
     }
 }
