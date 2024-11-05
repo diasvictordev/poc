@@ -66,3 +66,14 @@ jobs:
         with:
           name: meu-lambda-executavel
           path: meu-lambda.zip
+
+      - name: Deploy Lambda function
+        run: |
+          # Certifique-se de configurar suas credenciais da AWS (explicado abaixo)
+          aws lambda create-function --function-name myLambdaFunction \
+            --runtime provided.al2023 \
+            --handler bootstrap \
+            --role arn:aws:lambda:us-east-2:888352354638:function:handler \
+            --zip-file fileb://meu-lambda.zip \
+            || aws lambda update-function-code --function-name myLambdaFunction \
+              --zip-file fileb://meu-lambda.zip
