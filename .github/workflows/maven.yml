@@ -36,13 +36,10 @@ jobs:
           echo "export PATH=/opt/graalvm-community-jdk-21.0.2_linux-x64_bin/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           native-image --version || { echo "native-image não está disponível. Verifique a instalação do GraalVM."; exit 1; }
-
-      - name: Build native image with Maven
+      - name: Build project
         run: |
           cd app  # Altere para o diretório que contém o pom.xml
-          mvn clean package -Pnative -DskipTests
-        working-directory: ./app
-
+           mvn clean package -Pnative -DskipTests
       - name: List target directory after build
         run: ls -l app/target
 
@@ -54,16 +51,15 @@ jobs:
 
       - name: Move executables to root
         run: |
-          mv app/target/lambda-graalvm ./  # Move o executável nativo para a raiz
+          mv app/target/lambda-graalvm ./
           chmod +x ./lambda-graalvm  # Torna o executável disponível
 
       - name: List root directory
         run: ls -l
 
-      - name: Create ZIP for Lambda deployment
+      - name: Create ZIP for Lambda
         run: |
           zip meu-lambda.zip bootstrap lambda-graalvm
-          ls -l meu-lambda.zip
 
       - name: Upload Native Executable
         uses: actions/upload-artifact@v3
