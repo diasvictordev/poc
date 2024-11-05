@@ -16,21 +16,17 @@
     </properties>
 
     <dependencies>
-        <!-- Dependência para o AWS Lambda Java Core -->
+        <!-- Dependências do AWS Lambda e Jackson -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.2.1</version>
         </dependency>
-
-        <!-- Dependência para o AWS Lambda Java Events -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
             <version>3.11.0</version>
         </dependency>
-
-        <!-- Dependências do Jackson (usadas para conversão JSON) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -73,7 +69,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- Argumentos adicionais para otimizar a criação da imagem nativa -->
+                    <!-- Defina explicitamente a classe de entrada -->
+                    <mainClass>tech.buildrun.lambda.Handler</mainClass> <!-- Classe de entrada do Lambda -->
                     <nativeImage>
                         <args>
                             <arg>--initialize-at-build-time=com.fasterxml.jackson.databind.ObjectMapper</arg>
