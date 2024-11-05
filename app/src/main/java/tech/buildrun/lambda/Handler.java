@@ -39,11 +39,4 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         }
     }
 
-    public static void main(String[] args) {
-        // Apenas cria a instância do handler
-        Handler handler = new Handler();
-
-        // Mensagem opcional para confirmar a criação da instância
-        System.out.println("Handler instance created.");
-    }
 }
