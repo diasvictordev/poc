@@ -1,31 +1,69 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <groupId>tech.buildrun</groupId>
     <artifactId>lambda-graalvm</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
+        <quarkus.platform.version>2.7.0.Final</quarkus.platform.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <jackson.version>2.15.2</jackson.version>
     </properties>
 
     <dependencies>
+        <!-- Dependência para o AWS Lambda Java Core -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.2.1</version>
         </dependency>
+
+        <!-- Dependência para o AWS Lambda Java Events -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
             <version>3.11.0</version>
         </dependency>
+
+
+
+        <!-- Dependência para o Jackson (se você estiver usando) -->
+        <dependency>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                    <artifactId>jackson-datatype-jsr310</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                    <artifactId>jackson-datatype-jdk8</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                    <version>${jackson.version}</version>
+                </dependency>
     </dependencies>
 
+
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
@@ -38,14 +76,85 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <nativeImage>
-                        <args>
-                            <arg>--initialize-at-build-time=com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent</arg>
-                        </args>
-                    </nativeImage>
-                </configuration>
             </plugin>
+
+            <plugin>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>3.2.2</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-shade-plugin</artifactId>
+                            <version>3.5.1</version>
+                            <configuration>
+                                <createDependencyReducedPom>false</createDependencyReducedPom>
+                                <filters>
+                                    <filter>
+                                        <artifact>*:*</artifact>
+                                        <excludes>
+                                            <exclude>module-info.class</exclude>
+                                            <exclude>META-INF/*</exclude>
+                                            <exclude>META-INF/versions/**</exclude>
+                                            <exclude>META-INF/services/**</exclude>
+                                        </excludes>
+                                    </filter>
+                                </filters>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>shade</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.11.0</version>
+                            <configuration>
+                                <source>${maven.compiler.source}</source>
+                                <target>${maven.compiler.target}</target>
+                            </configuration>
+                        </plugin>
+
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>0.9.22</version>
+                        <configuration>
+                            <mainClass>tech.buildrun.lambda.Main</mainClass>
+<!--                            <nativeImage>-->
+<!--                                <args>-->
+<!--                                    <arg>&#45;&#45;initialize-at-build-time=com.fasterxml.jackson.databind.ObjectMapper</arg>-->
+<!--                                    <arg>&#45;&#45;initialize-at-run-time=com.fasterxml.jackson.databind.ObjectMapper</arg>-->
+<!--                                </args>-->
+<!--                            </nativeImage>-->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
 </project>
